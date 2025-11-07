@@ -155,15 +155,6 @@ def main() -> int:
 
     args = parser.parse_args()
 
-    if args.s3_bucket and args.report_name and not args.s3_profile:
-        console.print(
-            "[bold red]Error: --s3-profile is required when --s3-bucket is specified[/]"
-        )
-        console.print(
-            "[yellow]Please specify which AWS profile to use for S3 upload[/]"
-        )
-        return 1
-
     config_data: Optional[Dict[str, Any]] = None
     if args.config_file:
         config_data = load_config_file(args.config_file)
@@ -175,6 +166,16 @@ def main() -> int:
         for key, value in config_data.items():
             if hasattr(args, key) and getattr(args, key) == parser.get_default(key):
                 setattr(args, key, value)
+
+    # Validate S3 arguments after config file is loaded
+    if args.s3_bucket and args.report_name and not args.s3_profile:
+        console.print(
+            "[bold red]Error: --s3-profile is required when --s3-bucket is specified[/]"
+        )
+        console.print(
+            "[yellow]Please specify which AWS profile to use for S3 upload[/]"
+        )
+        return 1
 
     result = run_dashboard(args)
     return 0 if result == 0 else 1

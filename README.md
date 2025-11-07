@@ -268,6 +268,9 @@ time_range = 30 # Defaults to 30 days
 tag = ["CostCenter=Alpha", "Project=Phoenix"] # Optional
 audit = false # Set to true to run audit report by default
 trend = false # Set to true to run trend report by default
+s3_bucket = "my-finops-reports-bucket" # Optional: S3 bucket for report uploads
+s3_prefix = "reports/2025" # Optional: S3 key prefix/folder path
+s3_profile = "prod" # Required when s3_bucket is specified: AWS profile for S3 uploads
 ```
 
 ### YAML Configuration Example (`config.yaml` or `config.yml`)
@@ -292,6 +295,9 @@ tag:
   - "Project=Phoenix"
 audit: false # Set to true to run audit report by default
 trend: false # Set to true to run trend report by default
+s3_bucket: "my-finops-reports-bucket" # Optional: S3 bucket for report uploads
+s3_prefix: "reports/2025" # Optional: S3 key prefix/folder path
+s3_profile: "prod" # Required when s3_bucket is specified: AWS profile for S3 uploads
 ```
 
 ### JSON Configuration Example (`config.json`)
@@ -307,7 +313,10 @@ trend: false # Set to true to run trend report by default
   "time_range": 30,
   "tag": ["CostCenter=Alpha", "Project=Phoenix"],
   "audit": false, /* Set to true to run audit report by default */
-  "trend": false /* Set to true to run trend report by default */
+  "trend": false, /* Set to true to run trend report by default */
+  "s3_bucket": "my-finops-reports-bucket", /* Optional: S3 bucket for report uploads */
+  "s3_prefix": "reports/2025", /* Optional: S3 key prefix/folder path */
+  "s3_profile": "prod" /* Required when s3_bucket is specified: AWS profile for S3 uploads */
 }
 ```
 ---
