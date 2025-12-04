@@ -1,7 +1,7 @@
 import argparse
 import os
 from collections import defaultdict
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import boto3
 from rich import box
@@ -47,7 +47,7 @@ console = Console()
 
 def _initialize_profiles(
     args: argparse.Namespace,
-) -> Tuple[List[str], Optional[List[str]], Optional[int]]:
+) -> Tuple[List[str], Optional[List[str]], Optional[Union[int, str]]]:
     """Initialize AWS profiles based on arguments."""
     available_profiles = get_aws_profiles()
     if not available_profiles:
@@ -395,7 +395,7 @@ def _run_trend_analysis(profiles_to_use: List[str], args: argparse.Namespace) ->
 
 
 def _get_display_table_period_info(
-    profiles_to_use: List[str], time_range: Optional[int]
+    profiles_to_use: List[str], time_range: Optional[Union[int, str]]
 ) -> Tuple[str, str, str, str]:
     """Get period information for the display table."""
     if profiles_to_use:
@@ -440,7 +440,8 @@ def create_display_table(
             justify="center",
             vertical="middle",
         ),
-        Column("Cost By Service", vertical="middle"),
+        Column("Previous Cost By Service", vertical="middle"),
+        Column("Current Cost By Service", vertical="middle"),
         Column("Budget Status", vertical="middle"),
         Column("EC2 Instance Summary", justify="center", vertical="middle"),
         title="AWS FinOps Dashboard",
@@ -474,6 +475,9 @@ def add_profile_to_table(table: Table, profile_data: ProfileData) -> None:
             f"[bold red]${profile_data['last_month']:.2f}[/]",
             current_month_with_change,
             "[bright_green]"
+            + "\n".join(profile_data["previous_service_costs_formatted"])
+            + "[/]",
+            "[bright_green]"
             + "\n".join(profile_data["service_costs_formatted"])
             + "[/]",
             "[bright_yellow]" + "\n\n".join(profile_data["budget_info"]) + "[/]",
@@ -482,6 +486,7 @@ def add_profile_to_table(table: Table, profile_data: ProfileData) -> None:
     else:
         table.add_row(
             f"[bright_magenta]{profile_data['profile']}[/]",
+            "[red]Error[/]",
             "[red]Error[/]",
             "[red]Error[/]",
             f"[red]Failed to process profile: {profile_data['error']}[/]",
@@ -493,7 +498,7 @@ def add_profile_to_table(table: Table, profile_data: ProfileData) -> None:
 def _generate_dashboard_data(
     profiles_to_use: List[str],
     user_regions: Optional[List[str]],
-    time_range: Optional[int],
+    time_range: Optional[Union[int, str]],
     args: argparse.Namespace,
     table: Table,
 ) -> List[ProfileData]:
