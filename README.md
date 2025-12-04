@@ -47,6 +47,7 @@ Key features include:
 - **Cost Analysis by Time Period**: 
   - View current & previous month's spend by default
   - Set custom time ranges (e.g., 7, 30, 90 days) with `--time-range` option
+  - Use `--time-range last-month` to query the previous calendar month (includes service breakdown for that month)
 - **Cost by AWS Service**: Sorted by highest cost for better insights
 - **Cost by Tag**: Get the cost data by one or more tags with `--tag`(cost allocation tags must be enabled)
 - **AWS Budgets Information**: Displays budget limits and actual spend
