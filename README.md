@@ -21,6 +21,8 @@ Key features include:
 *   **Generate Cost & Audit Reports:** You can generate Cost, Trend and Audit Reports in PDF, CSV & JSON formats for further analysis and reporting purposes.
 ![alt text](cost-report.jpg)
 ![alt text](audit-report.jpg)
+* **Slack Integration:** You can send your cost and audit reports to your Slack workspace in CSV/PDF/JSON formats.
+![alt text](slack-export.png)
 
 ## Table of Contents
 
