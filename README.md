@@ -49,6 +49,7 @@ Key features include:
 - **Cost Analysis by Time Period**: 
   - View current & previous month's spend by default
   - Set custom time ranges (e.g., 7, 30, 90 days) with `--time-range` option
+  - Use `--time-range last-month` to query the previous calendar month (includes service breakdown for that month)
 - **Cost by AWS Service**: Sorted by highest cost for better insights
 - **Cost by Tag**: Get the cost data by one or more tags with `--tag`(cost allocation tags must be enabled)
 - **AWS Budgets Information**: Displays budget limits and actual spend
@@ -150,6 +151,20 @@ python -m venv .venv && source .venv/bin/activate
 pip install -e .
 ```
 
+### Option 5: Using Docker
+```bash
+git clone https://github.com/ravikiranvm/aws-finops-dashboard.git
+cd aws-finops-dashboard
+docker compose build
+
+# Run commands
+docker compose run --rm aws-finops --all
+docker compose run --rm aws-finops --profiles dev prod --regions us-east-1
+docker compose run --rm aws-finops --audit
+```
+
+**Note:** AWS credentials are mounted from `~/.aws` automatically via docker-compose.yml.
+
 ---
 
 ## AWS CLI Profile Setup
@@ -215,7 +230,7 @@ aws-finops [options]
 | `--report-name`, `-n` | Specify the base name for the report file (without extension). |
 | `--report-type`, `-y` | Specify report types (space-separated): 'csv', 'json', 'pdf'. For reports generated with `--audit`, only 'pdf' is applicable and other types will be ignored. |
 | `--dir`, `-d` | Directory to save the report file(s) (default: current directory). |
-| `--time-range`, `-t` | Time range for cost data in days (default: current month). Examples: 7, 30, 90. |
+| `--time-range`, `-t` | Time range for cost data in days (default: current month). Examples: 7, 30, 90. Use `last-month` to query the previous calendar month. |
 | `--trend` | View cost trend analysis for the last 6 months. |
 | `--audit` | View list of untagged, unused resoruces and budget breaches. |
 | `--s3-bucket`, `-s3` | S3 bucket name to export report files to. When specified, files are uploaded to S3 instead of saving locally. Requires `--s3-profile`. |
@@ -382,7 +397,8 @@ When exporting to CSV, a file is generated with the following columns:
 - `AWS Account ID`
 - `Last Month Cost` (or previous period based on time range)
 - `Current Month Cost` (or current period based on time range)
-- `Cost By Service` (Each service and its cost appears on a new line within the cell)
+- `Previous Period Cost By Service` (Each service and its cost appears on a new line within the cell)
+- `Current Period Cost By Service` (Each service and its cost appears on a new line within the cell)
 - `Budget Status` (Each budget's limit and actual spend appears on a new line within the cell)
 - `EC2 Instances` (Each instance state and its count appears on a new line within the cell)
 
