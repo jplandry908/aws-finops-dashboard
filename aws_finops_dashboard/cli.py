@@ -22,7 +22,7 @@ def parse_time_range(value: str):
 
 console = Console()
 
-__version__ = "2.2.9"
+__version__ = "2.3.0"
 
 
 def welcome_banner() -> None:
